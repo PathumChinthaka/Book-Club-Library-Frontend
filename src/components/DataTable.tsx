@@ -96,6 +96,7 @@ const DataTableComponent = <T,>({
         noDataComponent={NoDataComponent}
         highlightOnHover
         fixedHeader
+        striped
         responsive
       />
     </div>

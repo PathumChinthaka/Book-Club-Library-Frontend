@@ -1,11 +1,8 @@
 import React from "react";
 import { AppBreadcrumb } from "./Breadcrumb";
+import { breadcrumbs } from "../lib/breadcrumbs";
 
 const Header: React.FC = () => {
-  const breadcrumbs = [
-    { label: "Dashboard", href: "/" },
-    { label: "Books", href: "/dashboard/books" },
-  ];
   return (
     <header className="p-4 bg-white border-b flex items-center justify-between">
       <div className="flex items-center gap-2">
