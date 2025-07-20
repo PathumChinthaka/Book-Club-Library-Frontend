@@ -1,6 +1,7 @@
 import { useState } from "react";
 import bookImage from "../../assets/images/login-image.webp";
 import { RadioGroup } from "@headlessui/react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface RegisterForm {
   firstName: string;
@@ -21,6 +22,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,6 +32,7 @@ export default function RegisterPage() {
     e.preventDefault();
     const payload = { ...formData, role };
     console.log("Registering...", payload);
+    // send registration data to server
   };
 
   return (
@@ -38,16 +41,18 @@ export default function RegisterPage() {
         className="w-1/2 bg-cover bg-center"
         style={{ backgroundImage: `url(${bookImage})` }}
       ></div>
-      <div className="w-1/2 flex flex-col justify-center items-center p-10">
-        <h1 className="text-4xl font-bold mb-6">Book Club</h1>
-        <form className="space-y-4 w-full max-w-md" onSubmit={handleSubmit}>
+      <div className="w-1/2 flex flex-col justify-center items-center px-8 sm:px-16 py-10 bg-white">
+        <h1 className="text-4xl font-extrabold text-gray-800 mb-8">
+          Join Book Club
+        </h1>
+        <form className="space-y-5 w-full max-w-md" onSubmit={handleSubmit}>
           <input
             type="text"
             name="firstName"
             placeholder="First Name"
             value={formData.firstName}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
           <input
@@ -56,7 +61,7 @@ export default function RegisterPage() {
             placeholder="Last Name"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
           <input
@@ -65,7 +70,7 @@ export default function RegisterPage() {
             placeholder="Phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
           <input
@@ -74,47 +79,31 @@ export default function RegisterPage() {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            required
-          />
-
-          <RadioGroup value={role} onChange={setRole} className="flex gap-4">
-            <RadioGroup.Option value="member">
-              {({ checked }) => (
-                <span
-                  className={`px-4 py-2 border rounded cursor-pointer ${
-                    checked ? "bg-blue-500 text-white" : "bg-gray-100"
-                  }`}
-                >
-                  Member
-                </span>
-              )}
-            </RadioGroup.Option>
-            <RadioGroup.Option value="librarian">
-              {({ checked }) => (
-                <span
-                  className={`px-4 py-2 border rounded cursor-pointer ${
-                    checked ? "bg-blue-500 text-white" : "bg-gray-100"
-                  }`}
-                >
-                  Librarian
-                </span>
-              )}
-            </RadioGroup.Option>
-          </RadioGroup>
-
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <button
+              type="button"
+              className="absolute inset-y-0 right-3 flex items-center text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+              tabIndex={-1}
+            >
+              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </button>
+          </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors"
           >
             Register
           </button>
