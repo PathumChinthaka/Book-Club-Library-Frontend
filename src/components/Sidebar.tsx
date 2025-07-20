@@ -20,14 +20,9 @@ const Sidebar: React.FC = () => {
         <nav className="flex flex-col gap-3">
           {[
             { to: "/dashboard", label: "Dashboard", icon: <FaBook /> },
-            { to: "/members", label: "Members", icon: <FaUsers /> },
-            { to: "/add-books", label: "Add Books", icon: <FaPlus /> },
-            {
-              to: "/checkout",
-              label: "Check-out Books",
-              icon: <FaExchangeAlt />,
-            },
-            { to: "/settings", label: "Settings", icon: <FaCog /> },
+            { to: "/manage-members", label: "Manage Members", icon: <FaUsers /> },
+            { to: "/manage-books", label: "Manage Books", icon: <FaBook /> },
+            // { to: "/settings", label: "Settings", icon: <FaCog /> },
           ].map(({ to, label, icon }) => (
             <NavLink
               key={to}
