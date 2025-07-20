@@ -5,9 +5,14 @@ import { TableColumn } from "react-data-table-component";
 import { BookType } from "../../types/BookType";
 import { useNavigate } from "react-router-dom";
 import DataTableComponent from "../../components/DataTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetBooksQuery } from "../../features/book/manageBooksSlice";
+import { useDebounce } from "../../hooks/useDebounce";
+import { ToastContainer, toast } from "react-toastify";
+import AddBookForm from "../../components/Modals/AddBookModal";
 
 const ManageBooks = () => {
+  const [books, setBooks] = useState<BookType[]>([]);
   const [totalDataRows, setTotalDataRows] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -15,6 +20,28 @@ const ManageBooks = () => {
   const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
   const [selectedRowData, setSelectedRowData] = useState<string>("");
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [showAddBookModal, setShowAddBookModal] = useState<boolean>(false);
+
+  const debouncedProductSearch = useDebounce<string>(searchQuery);
+
+  const {
+    data: allBooksData,
+    isLoading: allBooksDataIsLoading,
+    isFetching: allBooksDataIsFetching,
+    isError: allBooksDataIsError,
+    error: allBooksDataError,
+  } = useGetBooksQuery({
+    search: debouncedProductSearch,
+  });
+
+  useEffect(() => {
+    if (allBooksData) {
+      setBooks(allBooksData);
+    }
+    if (allBooksDataIsError) {
+      toast.error("Failed to fetch products", { autoClose: 2300 });
+    }
+  }, [allBooksData, allBooksDataIsError]);
 
   const bookColumnHeaders: TableColumn<BookType>[] = [
     {
@@ -95,6 +122,17 @@ const ManageBooks = () => {
 
   return (
     <div className="space-y-4">
+      <ToastContainer
+        position="top-right"
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-sm text-sm shadow">
           Add Book
@@ -104,6 +142,7 @@ const ManageBooks = () => {
           <input
             type="text"
             placeholder="Search books..."
+            onChange={(e)=>setSearchQuery(e.target.value)}
             className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm"
           />
           <button className="p-2 rounded-sm border border-gray-300 hover:bg-gray-100 shadow-sm">
@@ -114,8 +153,8 @@ const ManageBooks = () => {
 
       <DataTableComponent
         tableHeading={bookColumnHeaders}
-        tableData={[]}
-        page={1}
+        tableData={books}
+        page={page}
         totalRows={10}
         setPage={handlePageChange}
         setPageSize={handlePageSizeChange}
