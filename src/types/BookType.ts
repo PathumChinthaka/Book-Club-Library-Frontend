@@ -11,3 +11,10 @@ export interface BookType {
   createdOn: string;
   updatedOn?: string | null;
 }
+
+export interface PaginatedBooksResponse {
+  page: number;
+  pageSize: number;
+  total: number;
+  data: BookType[];
+}

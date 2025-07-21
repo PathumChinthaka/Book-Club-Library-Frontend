@@ -2,7 +2,7 @@ import { MdOutlineModeEdit, MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FiFilter } from "react-icons/fi";
 import { TableColumn } from "react-data-table-component";
-import { BookType } from "../../types/BookType";
+import { BookType, PaginatedBooksResponse } from "../../types/BookType";
 import { useNavigate } from "react-router-dom";
 import DataTableComponent from "../../components/DataTable";
 import { useEffect, useState } from "react";
@@ -31,12 +31,14 @@ const ManageBooks = () => {
     isError: allBooksDataIsError,
     error: allBooksDataError,
   } = useGetBooksQuery({
-    search: debouncedProductSearch,
+    page: page,
+    pageSize: pageSize,
   });
 
   useEffect(() => {
     if (allBooksData) {
-      setBooks(allBooksData);
+      setBooks(allBooksData.data);
+      setTotalDataRows(allBooksData.total);
     }
     if (allBooksDataIsError) {
       toast.error("Failed to fetch products", { autoClose: 2300 });
@@ -142,7 +144,7 @@ const ManageBooks = () => {
           <input
             type="text"
             placeholder="Search books..."
-            onChange={(e)=>setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm"
           />
           <button className="p-2 rounded-sm border border-gray-300 hover:bg-gray-100 shadow-sm">
@@ -155,7 +157,7 @@ const ManageBooks = () => {
         tableHeading={bookColumnHeaders}
         tableData={books}
         page={page}
-        totalRows={10}
+        totalRows={totalDataRows}
         setPage={handlePageChange}
         setPageSize={handlePageSizeChange}
         initialPageSize={10}

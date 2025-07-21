@@ -1,14 +1,42 @@
-import { BookType } from "../../types/BookType";
+import { PaginatedBooksResponse, BookType } from "../../types/BookType";
 import { apiSlice } from "../api/apiSlice";
+
+type GetBooksQueryParams = {
+  title?: string;
+  author?: string;
+  category?: string;
+  isbn?: string;
+  page?: number;
+  pageSize?: number;
+};
 
 export const bookApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getBooks: builder.query<BookType[], { search: string }>({
-      query: ({ search }) => `/books`,
+    getBooks: builder.query<PaginatedBooksResponse, GetBooksQueryParams>({
+      query: ({ title, author, category, isbn, page, pageSize }) => {
+        const queryParams: string[] = [];
+
+        if (title) queryParams.push(`title=${encodeURIComponent(title)}`);
+        if (author) queryParams.push(`author=${encodeURIComponent(author)}`);
+        if (category)
+          queryParams.push(`category=${encodeURIComponent(category)}`);
+        if (isbn) queryParams.push(`isbn=${encodeURIComponent(isbn)}`);
+        if (page !== undefined) queryParams.push(`page=${page}`);
+        if (pageSize !== undefined) queryParams.push(`pageSize=${pageSize}`);
+
+        const queryString = queryParams.length
+          ? `?${queryParams.join("&")}`
+          : "";
+
+        return `/books${queryString}`;
+      },
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ _id }) => ({ type: "Books" as const, _id })),
+              ...result?.data?.map((book) => ({
+                type: "Books" as const,
+                id: book._id,
+              })),
               { type: "Books", id: "LIST" },
             ]
           : [{ type: "Books", id: "LIST" }],
