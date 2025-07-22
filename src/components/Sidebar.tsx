@@ -6,10 +6,14 @@ import {
   FaExchangeAlt,
   FaCog,
   FaSignOutAlt,
-  FaRegUser
+  FaRegUser,
 } from "react-icons/fa";
+import { selectCurrentUser } from "../features/auth/authSlice";
+import { useSelector } from "react-redux";
 
 const Sidebar: React.FC = () => {
+  const user = useSelector(selectCurrentUser);
+
   return (
     <aside className="w-64 h-screen bg-white border-r shadow-lg flex flex-col justify-between px-5 py-5">
       <div>
@@ -21,10 +25,21 @@ const Sidebar: React.FC = () => {
         <nav className="flex flex-col gap-3">
           {[
             { to: "/dashboard", label: "Dashboard", icon: <FaBook /> },
-            { to: "/manage-members", label: "Manage Members", icon: <FaUsers /> },
+            {
+              to: "/manage-members",
+              label: "Manage Members",
+              icon: <FaUsers />,
+            },
             { to: "/manage-books", label: "Manage Books", icon: <FaBook /> },
-            { to: "/manage-users", label: "Manage Users", icon: <FaRegUser /> },
-            // { to: "/settings", label: "Settings", icon: <FaCog /> },
+            ...(user?.role === "admin"
+              ? [
+                  {
+                    to: "/manage-users",
+                    label: "Manage Users",
+                    icon: <FaRegUser />,
+                  },
+                ]
+              : []),
           ].map(({ to, label, icon }) => (
             <NavLink
               key={to}
