@@ -6,6 +6,7 @@ import {
   FaExchangeAlt,
   FaCog,
   FaSignOutAlt,
+  FaRegUser
 } from "react-icons/fa";
 
 const Sidebar: React.FC = () => {
@@ -22,6 +23,7 @@ const Sidebar: React.FC = () => {
             { to: "/dashboard", label: "Dashboard", icon: <FaBook /> },
             { to: "/manage-members", label: "Manage Members", icon: <FaUsers /> },
             { to: "/manage-books", label: "Manage Books", icon: <FaBook /> },
+            { to: "/manage-users", label: "Manage Users", icon: <FaRegUser /> },
             // { to: "/settings", label: "Settings", icon: <FaCog /> },
           ].map(({ to, label, icon }) => (
             <NavLink

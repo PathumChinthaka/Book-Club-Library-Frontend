@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AuthState } from "../../types/AuthTypes";
 import { decryptData } from "../../utils/utilMethods";
+import { RootState } from "../../lib/store";
 
 const initialState: AuthState = {
   accessToken: decryptData(localStorage.getItem("accessToken")),
@@ -26,3 +27,9 @@ const authSlice = createSlice({
 
 export const { setCredentials, logOut } = authSlice.actions;
 export default authSlice.reducer;
+
+export const selectCurrentUser = (state: RootState) => {
+  const stored = state.auth.user;
+  return typeof stored === "string" ? JSON.parse(stored) : stored;
+};
+export const selectCurrentToken = (state: RootState) => state.auth.accessToken;
