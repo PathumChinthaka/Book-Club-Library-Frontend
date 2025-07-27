@@ -37,7 +37,6 @@ export default function LoginPage() {
         email: formData.email,
         password: formData.password,
       }).unwrap();
-      console.log(userDetails);
 
       if (userDetails) {
         setCredentials(userDetails);

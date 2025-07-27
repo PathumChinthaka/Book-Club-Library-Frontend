@@ -1,14 +1,5 @@
-import { PaginatedBooksResponse, BookType } from "../../types/BookType";
+import { PaginatedBooksResponse, BookType, GetBooksQueryParams } from "../../types/BookType";
 import { apiSlice } from "../api/apiSlice";
-
-type GetBooksQueryParams = {
-  title?: string;
-  author?: string;
-  category?: string;
-  isbn?: string;
-  page?: number;
-  pageSize?: number;
-};
 
 export const bookApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

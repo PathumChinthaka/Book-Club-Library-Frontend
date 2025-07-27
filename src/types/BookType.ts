@@ -18,3 +18,12 @@ export interface PaginatedBooksResponse {
   total: number;
   data: BookType[];
 }
+
+export type GetBooksQueryParams = {
+  title?: string;
+  author?: string;
+  category?: string;
+  isbn?: string;
+  page?: number;
+  pageSize?: number;
+};
