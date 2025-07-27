@@ -94,10 +94,10 @@ const DataTableComponent = <T,>({
         onChangeRowsPerPage={handleRowsPerPageChanges}
         customStyles={customStyles}
         noDataComponent={NoDataComponent}
-        highlightOnHover
-        fixedHeader
-        striped
-        responsive
+        highlightOnHover={true}
+        fixedHeader={true}
+        striped={true}
+        responsive={true}
       />
     </div>
   );

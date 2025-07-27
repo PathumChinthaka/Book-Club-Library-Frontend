@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 import { useGetBooksQuery } from "../../features/book/manageBooksSlice";
 import { useDebounce } from "../../hooks/useDebounce";
 import { ToastContainer, toast } from "react-toastify";
-import AddBookForm from "../../components/Modals/AddBookModal";
+import AddBookModal from "../../components/Modals/AddBookModal";
+import CommonModal from "../../components/Modals/CommonModal";
 
 const ManageBooks = () => {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -108,9 +109,6 @@ const ManageBooks = () => {
           </button>
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
     },
   ];
 
@@ -121,6 +119,8 @@ const ManageBooks = () => {
   const handlePageSizeChange = (newPageSize: number) => {
     setPageSize(newPageSize);
   };
+
+  const handleAddBook = () => {};
 
   return (
     <div className="space-y-4">
@@ -136,7 +136,10 @@ const ManageBooks = () => {
         theme="light"
       />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-sm text-sm shadow">
+        <button
+          onClick={() => setShowAddBookModal(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-sm text-sm shadow"
+        >
           Add Book
         </button>
 
@@ -161,6 +164,13 @@ const ManageBooks = () => {
         setPage={handlePageChange}
         setPageSize={handlePageSizeChange}
         initialPageSize={10}
+      />
+
+      <AddBookModal
+        isOpen={showAddBookModal}
+        onClose={() => setShowAddBookModal(false)}
+        onHandleClick={handleAddBook}
+        modalTitle="Add Book"
       />
     </div>
   );
