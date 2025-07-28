@@ -65,14 +65,26 @@ const AddReaderModal: React.FC<AddReaderFormProps> = ({
   useEffect(() => {
     if (isUpdateMode && selectedRowData) {
       setFormData({
-        firstName: selectedRowData.title || "",
-        lastName: selectedRowData.author || "",
-        email: selectedRowData.category || "",
-        phone: selectedRowData.isbn || "",
-        address: selectedRowData.publisher || "",
+        firstName: selectedRowData.firstName || "",
+        lastName: selectedRowData.lastName || "",
+        email: selectedRowData.email || "",
+        phone: selectedRowData.phone || "",
+        address: selectedRowData.address || "",
       });
     }
   }, [isUpdateMode, selectedRowData]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        address: "",
+      });
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -197,7 +209,7 @@ const AddReaderModal: React.FC<AddReaderFormProps> = ({
               </div>
             </div>
 
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <label
                 htmlFor="profilePicture"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -223,7 +235,7 @@ const AddReaderModal: React.FC<AddReaderFormProps> = ({
                   {errors.profilePicture}
                 </p>
               )}
-            </div>
+            </div> */}
           </form>
         </ModalBody>
 

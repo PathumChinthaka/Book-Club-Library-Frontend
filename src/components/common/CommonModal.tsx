@@ -43,7 +43,6 @@ const CommonModal: React.FC<CommonModalProps> = ({
   confirmButtonText = "Confirm",
   cancelButtonText = "Cancel",
 }) => {
-  // Define modal styles based on type
   const typeStyles = {
     info: {
       color: "blue",
@@ -69,21 +68,21 @@ const CommonModal: React.FC<CommonModalProps> = ({
     <Modal dismissible show={isOpen} onClose={onClose}>
       <ModalHeader className={`border-b border-${currentType.color}-100`}>
         <div className="flex items-center gap-2">
-          {title || type.charAt(0).toUpperCase() + type.slice(1)}
+          {title}
         </div>
       </ModalHeader>
       <ModalBody className="space-y-4">
         {modalContent || <p>{message}</p>}
       </ModalBody>
       <ModalFooter className="border-t border-gray-200 flex justify-between items-center">
-        {showCancelButton && (
-          <Button color="light" onClick={onClose} disabled={isLoading}>
-            {cancelButtonText}
-          </Button>
-        )}
         {showConfirmButton && (
           <Button color={type} onClick={onHandleClick} disabled={isLoading}>
             {confirmButtonText}
+          </Button>
+        )}
+        {showCancelButton && (
+          <Button color="default" onClick={onClose} disabled={isLoading}>
+            {cancelButtonText}
           </Button>
         )}
       </ModalFooter>

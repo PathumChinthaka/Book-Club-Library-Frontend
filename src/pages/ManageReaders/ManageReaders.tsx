@@ -10,11 +10,13 @@ import { useDebounce } from "../../hooks/useDebounce";
 import {
   useCreateReaderMutation,
   useDeleteReaderMutation,
+  useUpdateReaderDetailsMutation,
   useGetAllReadersQuery,
 } from "../../features/reader/manageReadersSlice";
 import { ToastContainer, toast } from "react-toastify";
 import AddReaderModal from "../../components/Modals/AddReaderModal";
 import CommonModal from "../../components/common/CommonModal";
+import DeleteConfirmationModal from "../../components/common/DeleteConfirmationModal";
 
 const ManageReaders = () => {
   const [readers, setReaders] = useState<ReaderType[]>([]);
@@ -23,7 +25,7 @@ const ManageReaders = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
-  const [selectedRowData, setSelectedRowData] = useState<ReaderType>();
+  const [selectedRowData, setSelectedRowData] = useState<any>();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showAddReaderModal, setShowAddReaderModal] = useState<boolean>(false);
   const debouncedProductSearch = useDebounce<string>(searchQuery);
@@ -44,6 +46,9 @@ const ManageReaders = () => {
 
   const [deleteReader, { isLoading: deleteReaderIsLoading }] =
     useDeleteReaderMutation();
+
+  const [updateReader, { isLoading: updateReaderIsLoading }] =
+    useUpdateReaderDetailsMutation();
 
   useEffect(() => {
     if (allReadersData) {
@@ -112,21 +117,27 @@ const ManageReaders = () => {
           <button
             title="Edit"
             className="text-blue-600 hover:text-blue-800"
-            // onClick={() => onEdit(row)}
+            onClick={() => {
+              setIsUpdateMode(true);
+              setSelectedRowData(row);
+            }}
           >
             <MdOutlineModeEdit size={18} />
           </button>
-          <button
+          {/* <button
             title="View"
-            className="text-green-600 hover:text-green-800"
+            className="text-green-600 hover:text-green-800 "
             // onClick={() => navigate(`/books/${row._id}`)}
           >
             <MdOutlineRemoveRedEye size={18} />
-          </button>
+          </button> */}
           <button
             title="Delete"
             className="text-red-600 hover:text-red-800"
-            onClick={() => setSelectedRowData(row)}
+            onClick={() => {
+              setSelectedRowData(row);
+              setShowDeleteModal(true);
+            }}
           >
             <FaRegTrashCan size={16} />
           </button>
@@ -146,8 +157,8 @@ const ManageReaders = () => {
   const handleAddReader = async (data: any) => {
     try {
       await createReader(data).unwrap();
-      toast.success(`Reader created successfully`, {
-        delay: 1300,
+      toast.success(`Reader added successfully`, {
+        delay: 500,
       });
       setShowAddReaderModal(false);
     } catch (error: any) {
@@ -157,10 +168,10 @@ const ManageReaders = () => {
             error.data.title ||
             error.data.message ||
             "Something went wrong",
-          { delay: 1500 }
+          { delay: 700 }
         );
       } else {
-        toast.error("Failed to create reader", { delay: 1500 });
+        toast.error("Failed to add reader", { delay: 700 });
       }
     }
   };
@@ -169,9 +180,10 @@ const ManageReaders = () => {
     try {
       await deleteReader(selectedRowData?._id || "").unwrap();
       toast.success(`Reader deleted successfully`, {
-        delay: 1300,
+        delay: 500,
       });
       setShowDeleteModal(false);
+      setSelectedRowData("");
     } catch (error: any) {
       if (error?.data) {
         toast.error(
@@ -179,10 +191,36 @@ const ManageReaders = () => {
             error.data.title ||
             error.data.message ||
             "Something went wrong",
-          { delay: 1500 }
+          { delay: 700 }
         );
       } else {
-        toast.error("Failed to delete reader", { delay: 1500 });
+        toast.error("Failed to delete reader", { delay:700 });
+      }
+    }
+  };
+
+  const handleUpdateReader = async (data: any) => {
+    try {
+      await updateReader({
+        id: selectedRowData?._id,
+        ...data,
+      }).unwrap();
+      toast.success(`Reader updated successfully`, {
+        delay: 500,
+      });
+      setIsUpdateMode(false);
+      setSelectedRowData("");
+    } catch (error: any) {
+      if (error?.data) {
+        toast.error(
+          error.data.Message ||
+            error.data.title ||
+            error.data.message ||
+            "Something went wrong",
+          { delay: 700 }
+        );
+      } else {
+        toast.error("Failed to update reader", { delay: 700 });
       }
     }
   };
@@ -232,16 +270,25 @@ const ManageReaders = () => {
       />
 
       <AddReaderModal
-        isOpen={showAddReaderModal}
-        onClose={() => setShowAddReaderModal(false)}
-        onHandleClick={handleAddReader}
-        isLoading={createReaderIsLoading}
+        isOpen={showAddReaderModal || isUpdateMode}
+        onClose={() => {
+          if (isUpdateMode) {
+            setIsUpdateMode(false);
+          } else {
+            setShowAddReaderModal(false);
+          }
+        }}
+        onHandleClick={isUpdateMode ? handleUpdateReader : handleAddReader}
+        isLoading={createReaderIsLoading || updateReaderIsLoading}
+        isUpdateMode={isUpdateMode}
+        selectedRowData={selectedRowData}
       />
 
-      <CommonModal
+      <DeleteConfirmationModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        isLoading={createReaderIsLoading}
+        isLoading={deleteReaderIsLoading}
+        onConfirm={handleDeleteReader}
       />
     </div>
   );
