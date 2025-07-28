@@ -45,11 +45,16 @@ export const readerApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, id) => [{ type: "Reader", id }],
     }),
 
-    createReader: builder.mutation<ReaderType, Partial<ReaderType>>({
+    createReader: builder.mutation<
+      { id: string } | { error: any },
+      Partial<ReaderType>
+    >({
       query: (newReader) => ({
         url: "/readers",
         method: "POST",
-        body: newReader,
+        body: {
+          ...newReader,
+        },
       }),
       invalidatesTags: [{ type: "Readers", id: "LIST" }],
     }),

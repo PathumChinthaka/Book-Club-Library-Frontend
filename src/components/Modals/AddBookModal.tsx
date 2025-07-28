@@ -12,7 +12,7 @@ type AddBookFormProps = {
   onClose: () => void;
   onHandleClick: (data: any) => void;
   isLoading?: boolean;
-  modalTitle: string;
+  modalTitle?: string;
   isUpdateMode?: boolean;
   selectedRowData?: Record<string, any> | null;
 };
@@ -136,7 +136,7 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
   return (
     <>
       <Modal dismissible show={isOpen} onClose={() => onClose()}>
-        <ModalHeader>{modalTitle}</ModalHeader>
+        <ModalHeader>{isUpdateMode ? "Update Book" : "Add Book"}</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

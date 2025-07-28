@@ -26,8 +26,8 @@ const Sidebar: React.FC = () => {
           {[
             { to: "/dashboard", label: "Dashboard", icon: <FaBook /> },
             {
-              to: "/manage-members",
-              label: "Manage Members",
+              to: "/manage-readers",
+              label: "Manage Readers",
               icon: <FaUsers />,
             },
             { to: "/manage-books", label: "Manage Books", icon: <FaBook /> },

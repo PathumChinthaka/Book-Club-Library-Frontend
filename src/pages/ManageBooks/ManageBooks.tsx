@@ -2,7 +2,7 @@ import { MdOutlineModeEdit, MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FiFilter } from "react-icons/fi";
 import { TableColumn } from "react-data-table-component";
-import { BookType, PaginatedBooksResponse } from "../../types/BookType";
+import { BookType } from "../../types/BookType";
 import { useNavigate } from "react-router-dom";
 import DataTableComponent from "../../components/DataTable";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import { useGetBooksQuery } from "../../features/book/manageBooksSlice";
 import { useDebounce } from "../../hooks/useDebounce";
 import { ToastContainer, toast } from "react-toastify";
 import AddBookModal from "../../components/Modals/AddBookModal";
-import CommonModal from "../../components/Modals/CommonModal";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const ManageBooks = () => {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -120,10 +120,17 @@ const ManageBooks = () => {
     setPageSize(newPageSize);
   };
 
-  const handleAddBook = () => {};
+  const handleAddBook = async (data: any) => {
+    console.log("Add Book data", data);
+  };
 
   return (
     <div className="space-y-4">
+      {allBooksDataIsLoading || allBooksDataIsFetching ? (
+        <LoadingSpinner />
+      ) : (
+        ""
+      )}
       <ToastContainer
         position="top-right"
         hideProgressBar={true}
@@ -170,7 +177,6 @@ const ManageBooks = () => {
         isOpen={showAddBookModal}
         onClose={() => setShowAddBookModal(false)}
         onHandleClick={handleAddBook}
-        modalTitle="Add Book"
       />
     </div>
   );

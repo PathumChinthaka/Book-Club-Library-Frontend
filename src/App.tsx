@@ -6,6 +6,7 @@ import RegisterPage from "./pages/Register/RegisterPage";
 import ManageBooks from "./pages/ManageBooks/ManageBooks";
 import ManageUsers from "./pages/ManageUsers/ManageUsers";
 import ProtectedRoute from "./components/Route/ProtectedRoute";
+import ManageReaders from "./pages/ManageReaders/ManageReaders";
 
 function App() {
   return (
@@ -18,6 +19,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <ManageUsers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-readers"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "librarian"]}>
+              <ManageReaders />
             </ProtectedRoute>
           }
         />
