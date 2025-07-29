@@ -28,7 +28,7 @@ const ManageReaders = () => {
   const [selectedRowData, setSelectedRowData] = useState<any>();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showAddReaderModal, setShowAddReaderModal] = useState<boolean>(false);
-  const debouncedProductSearch = useDebounce<string>(searchQuery);
+  const debouncedReaderSearch = useDebounce<string>(searchQuery);
 
   const {
     data: allReadersData,
@@ -39,6 +39,7 @@ const ManageReaders = () => {
   } = useGetAllReadersQuery({
     page: page,
     pageSize: pageSize,
+    search: debouncedReaderSearch,
   });
 
   const [createReader, { isLoading: createReaderIsLoading }] =
@@ -194,7 +195,7 @@ const ManageReaders = () => {
           { delay: 700 }
         );
       } else {
-        toast.error("Failed to delete reader", { delay:700 });
+        toast.error("Failed to delete reader", { delay: 700 });
       }
     }
   };

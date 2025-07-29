@@ -4,9 +4,10 @@ import { apiSlice } from "../api/apiSlice";
 export const bookApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getBooks: builder.query<PaginatedBooksResponse, GetBooksQueryParams>({
-      query: ({ title, author, category, isbn, page, pageSize }) => {
+      query: ({ title, author, category, search, isbn, page, pageSize }) => {
         const queryParams: string[] = [];
 
+        if (search) queryParams.push(`search=${encodeURIComponent(search)}`);
         if (title) queryParams.push(`title=${encodeURIComponent(title)}`);
         if (author) queryParams.push(`author=${encodeURIComponent(author)}`);
         if (category)

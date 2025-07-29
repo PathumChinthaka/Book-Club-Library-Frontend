@@ -23,6 +23,7 @@ export type GetReadersQueryParams = {
   firstName?: string;
   lastName?: string;
   email?: string;
+  search?: string;
   page?: number;
   pageSize?: number;
 };

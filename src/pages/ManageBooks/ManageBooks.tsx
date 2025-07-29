@@ -23,7 +23,7 @@ const ManageBooks = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showAddBookModal, setShowAddBookModal] = useState<boolean>(false);
 
-  const debouncedProductSearch = useDebounce<string>(searchQuery);
+  const debouncedBookSearch = useDebounce<string>(searchQuery);
 
   const {
     data: allBooksData,
@@ -34,6 +34,7 @@ const ManageBooks = () => {
   } = useGetBooksQuery({
     page: page,
     pageSize: pageSize,
+    search: debouncedBookSearch,
   });
 
   useEffect(() => {

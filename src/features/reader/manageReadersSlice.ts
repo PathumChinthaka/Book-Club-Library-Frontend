@@ -11,7 +11,7 @@ export const readerApiSlice = apiSlice.injectEndpoints({
       PaginatedReaderResponse,
       GetReadersQueryParams
     >({
-      query: ({ firstName, lastName, email, page, pageSize }) => {
+      query: ({ firstName, lastName, email, search, page, pageSize }) => {
         const queryParams: string[] = [];
 
         if (firstName)
@@ -19,6 +19,7 @@ export const readerApiSlice = apiSlice.injectEndpoints({
         if (lastName)
           queryParams.push(`lastName=${encodeURIComponent(lastName)}`);
         if (email) queryParams.push(`email=${encodeURIComponent(email)}`);
+        if (search) queryParams.push(`search=${encodeURIComponent(search)}`);
         if (page !== undefined) queryParams.push(`page=${page}`);
         if (pageSize !== undefined) queryParams.push(`pageSize=${pageSize}`);
 

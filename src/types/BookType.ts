@@ -23,6 +23,7 @@ export type GetBooksQueryParams = {
   title?: string;
   author?: string;
   category?: string;
+  search?: string;
   isbn?: string;
   page?: number;
   pageSize?: number;
