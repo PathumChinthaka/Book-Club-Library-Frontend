@@ -54,6 +54,17 @@ export const lendingApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: [{ type: "Lendings", id: "LIST" }],
     }),
 
+    remindLending: builder.mutation<{ success: boolean }, string>({
+      query: (lendId) => ({
+        url: `/lendings/${lendId}/remind`,
+        method: "POST",
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: "Lendings", id },
+        { type: "Lendings", id: "LIST" },
+      ],
+    }),
+
     updateLendingDetails: builder.mutation<
       LendingType,
       Partial<LendingType> & { id: string }
@@ -88,4 +99,5 @@ export const {
   useUpdateLendingDetailsMutation,
   useGetLendingByIdQuery,
   useDeleteLendingMutation,
+  useRemindLendingMutation
 } = lendingApiSlice;

@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import {
   useCreateLendingMutation,
   useGetAllLendingsQuery,
+  useRemindLendingMutation,
 } from "../../features/lending/manageLendingSlice";
 import AddLendingModal from "../../components/Modals/AddLendingModal";
 import { getFormattedDate } from "../../utils/utilMethods";
@@ -26,6 +27,7 @@ const ManageLending = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showAddLendingModal, setShowAddLendingModal] =
     useState<boolean>(false);
+  const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
   const debouncedLendingSearch = useDebounce<string>(searchQuery);
 
   const {
@@ -42,6 +44,9 @@ const ManageLending = () => {
 
   const [createLending, { isLoading: createLendingIsLoading }] =
     useCreateLendingMutation();
+
+  const [remindLending, { isLoading: remindLendingIsLoading }] =
+    useRemindLendingMutation();
 
   useEffect(() => {
     if (allLendingsData) {
@@ -83,6 +88,30 @@ const ManageLending = () => {
     }
   };
 
+  const handleRemindLending = async (lendingId: string) => {
+    try {
+      setLoadingMap((prev) => ({ ...prev, [lendingId]: true }));
+      await remindLending(lendingId).unwrap();
+      toast.success(`Lending reminded successfully`, {
+        delay: 500,
+      });
+    } catch (error: any) {
+      if (error?.data) {
+        toast.error(
+          error.data.Message ||
+            error.data.title ||
+            error.data.message ||
+            "Something went wrong",
+          { delay: 700 }
+        );
+      } else {
+        toast.error("Failed to remind lending", { delay: 700 });
+      }
+    } finally {
+      setLoadingMap((prev) => ({ ...prev, [lendingId]: false }));
+    }
+  };
+
   const lendingColumnHeaders: TableColumn<LendingResponse>[] = [
     {
       name: "Book Name",
@@ -107,18 +136,48 @@ const ManageLending = () => {
     {
       name: "Remind",
       cell: (row) => {
-        const isReminded = !!row?.reminderSent;
+        const isReminded = row?.reminderSent;
+        const isLoading = loadingMap[row._id] || false;
+
         return (
           <button
-            // onClick={() => handleSendReminder(row)}
-            disabled={isReminded}
-            className={`px-3 py-1 rounded text-sm font-medium ${
-              isReminded
+            onClick={() => handleRemindLending(row?._id)}
+            disabled={isReminded || isLoading}
+            className={`px-3 py-1 rounded text-sm font-medium flex items-center gap-2 ${
+              isReminded || isLoading
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
           >
-            {isReminded ? "Reminder Sent" : "Send Reminder"}
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Sending...
+              </>
+            ) : isReminded ? (
+              "Reminder Sent"
+            ) : (
+              "Send Reminder"
+            )}
           </button>
         );
       },
@@ -154,7 +213,7 @@ const ManageLending = () => {
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <input
             type="text"
-            placeholder="Search readers..."
+            placeholder="Search..."
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm"
           />
