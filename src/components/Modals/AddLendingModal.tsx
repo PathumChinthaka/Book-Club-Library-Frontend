@@ -15,16 +15,24 @@ import LoadingSpinner from "../common/LoadingSpinner";
 type LendingModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: any) => void;
+  onHandleClick: (data: any) => void;
+  isLoading?: boolean;
+  modalTitle?: string;
+  isUpdateMode?: boolean;
+  selectedRowData?: Record<string, any> | null;
 };
 
 type ReaderOption = { value: string; label: string };
 type BookOption = { value: string; label: string };
 
-const LendingModal: React.FC<LendingModalProps> = ({
+const AddLendingModal: React.FC<LendingModalProps> = ({
   isOpen,
   onClose,
-  onSave,
+  onHandleClick,
+  isLoading = false,
+  modalTitle,
+  isUpdateMode = false,
+  selectedRowData = null,
 }) => {
   const [readers, setReaders] = useState([]);
   const [books, setBooks] = useState([]);
@@ -32,6 +40,8 @@ const LendingModal: React.FC<LendingModalProps> = ({
     readerId: "",
     bookId: "",
     dueDate: "",
+    returnedDate: null,
+    reminderSent: false,
   });
   const [readerSearch, setReaderSearch] = useState("");
   const [bookSearch, setBookSearch] = useState("");
@@ -78,10 +88,10 @@ const LendingModal: React.FC<LendingModalProps> = ({
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    console.log(formData);
     if (!formData.readerId || !formData.bookId || !formData.dueDate) return;
-    onSave(formData);
+    onHandleClick(formData);
   };
 
   return (
@@ -108,6 +118,7 @@ const LendingModal: React.FC<LendingModalProps> = ({
               onInputChange={(value) => setReaderSearch(value)} // capture input
               placeholder="Search or select reader..."
               isSearchable
+              required
             />
           </div>
 
@@ -122,6 +133,7 @@ const LendingModal: React.FC<LendingModalProps> = ({
               onInputChange={(value) => setBookSearch(value)}
               placeholder="Search or select book..."
               isSearchable
+              required
             />
           </div>
 
@@ -142,7 +154,19 @@ const LendingModal: React.FC<LendingModalProps> = ({
       </ModalBody>
       <ModalFooter className="flex justify-between">
         <Button onClick={handleSubmit}>Save</Button>
-        <Button color="alternative" onClick={onClose}>
+        <Button
+          color="alternative"
+          onClick={() => {
+            setFormData({
+              readerId: "",
+              bookId: "",
+              dueDate: "",
+              returnedDate: null,
+              reminderSent: false,
+            });
+            onClose()
+          }}
+        >
           Cancel
         </Button>
       </ModalFooter>
@@ -150,4 +174,4 @@ const LendingModal: React.FC<LendingModalProps> = ({
   );
 };
 
-export default LendingModal;
+export default AddLendingModal;

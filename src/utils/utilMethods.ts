@@ -22,4 +22,9 @@ export const decryptData = <T = any>(ciphertext: string | null): T | null => {
   }
 };
 
+export const getFormattedDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toISOString().split("T")[0]; 
+};
+
 

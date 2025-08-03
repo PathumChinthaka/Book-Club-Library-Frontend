@@ -3,7 +3,6 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { FiFilter } from "react-icons/fi";
 import { TableColumn } from "react-data-table-component";
 import { ReaderType } from "../../types/ReaderType";
-import { useNavigate } from "react-router-dom";
 import DataTableComponent from "../../components/DataTable";
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -15,8 +14,8 @@ import {
 } from "../../features/reader/manageReadersSlice";
 import { ToastContainer, toast } from "react-toastify";
 import AddReaderModal from "../../components/Modals/AddReaderModal";
-import CommonModal from "../../components/common/CommonModal";
 import DeleteConfirmationModal from "../../components/common/DeleteConfirmationModal";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const ManageReaders = () => {
   const [readers, setReaders] = useState<ReaderType[]>([]);
@@ -228,6 +227,11 @@ const ManageReaders = () => {
 
   return (
     <div className="space-y-4">
+      {allReadersDataIsLoading || allReadersDataIsFetching ? (
+        <LoadingSpinner />
+      ) : (
+        ""
+      )}
       <ToastContainer
         position="top-right"
         hideProgressBar={true}

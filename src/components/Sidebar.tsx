@@ -8,6 +8,7 @@ import {
   FaSignOutAlt,
   FaRegUser,
 } from "react-icons/fa";
+import { IoLibrarySharp } from "react-icons/io5";
 import { selectCurrentUser } from "../features/auth/authSlice";
 import { useSelector } from "react-redux";
 
@@ -24,7 +25,7 @@ const Sidebar: React.FC = () => {
 
         <nav className="flex flex-col gap-3">
           {[
-            { to: "/dashboard", label: "Dashboard", icon: <FaBook /> },
+            { to: "/", label: "Manage Lendings", icon: <IoLibrarySharp /> },
             {
               to: "/manage-readers",
               label: "Manage Readers",
