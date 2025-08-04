@@ -67,6 +67,6 @@ export const customBaseQuery: BaseQueryFn<
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: customBaseQuery,
-  tagTypes: ["User", "Books", "Readers", "Book", "Reader", "Lendings", "Lending"],
+  tagTypes: ["User", "Books", "Readers", "Book", "Reader", "Lendings", "Lending", "User"],
   endpoints: () => ({}),
 });
