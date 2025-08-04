@@ -8,6 +8,7 @@ import ManageUsers from "./pages/ManageUsers/ManageUsers";
 import ProtectedRoute from "./components/Route/ProtectedRoute";
 import ManageReaders from "./pages/ManageReaders/ManageReaders";
 import ManageLending from "./pages/ManageLendings/ManageLending";
+import UserDetails from "./pages/UserDetails/UserDetails";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/" element={<DashboardLayout />}>
         <Route index element={<ManageLending />} />
         <Route path="/manage-books" element={<ManageBooks />} />
+        <Route path="/user-profile/:userId" element={<UserDetails />} />
         <Route
           path="/manage-users"
           element={

@@ -11,9 +11,18 @@ import {
 import { IoLibrarySharp } from "react-icons/io5";
 import { selectCurrentUser } from "../features/auth/authSlice";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logOut } from "../features/auth/authSlice";
 
 const Sidebar: React.FC = () => {
   const user = useSelector(selectCurrentUser);
+  const navigate = useNavigate();
+
+  const handleLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    logOut();
+    navigate("/login");
+  };
 
   return (
     <aside className="w-64 h-screen bg-white border-r shadow-lg flex flex-col justify-between px-5 py-5">
@@ -62,7 +71,7 @@ const Sidebar: React.FC = () => {
 
       <div className="pt-3 border-t border-gray-400 mt-10">
         <NavLink
-          to="/logout"
+          onClick={handleLogout}
           className={({ isActive }) =>
             `flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200 ${
               isActive

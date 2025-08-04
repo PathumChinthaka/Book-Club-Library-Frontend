@@ -120,12 +120,22 @@ export default function LoginPage() {
             ))}
           </RadioGroup>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors"
-          >
-            Login
-          </button>
+          <div className="space-y-4">
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors"
+            >
+              Login
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate("/register")} 
+              className="w-full border border-blue-600 text-blue-600 py-3 rounded-xl font-semibold text-lg hover:bg-blue-50 transition-colors"
+            >
+              Sign Up
+            </button>
+          </div>
         </form>
       </div>
     </div>
