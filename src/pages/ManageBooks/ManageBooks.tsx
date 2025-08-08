@@ -83,34 +83,34 @@ const ManageBooks = () => {
       name: "Available",
       selector: (row) => row.copiesAvailable.toString(),
     },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <div className="flex items-center gap-3">
-          <button
-            title="Edit"
-            className="text-blue-600 hover:text-blue-800"
-            // onClick={() => onEdit(row)}
-          >
-            <MdOutlineModeEdit size={18} />
-          </button>
-          <button
-            title="View"
-            className="text-green-600 hover:text-green-800"
-            // onClick={() => navigate(`/books/${row._id}`)}
-          >
-            <MdOutlineRemoveRedEye size={18} />
-          </button>
-          <button
-            title="Delete"
-            className="text-red-600 hover:text-red-800"
-            // onClick={() => onDelete(row)}
-          >
-            <FaRegTrashCan size={16} />
-          </button>
-        </div>
-      ),
-    },
+    // {
+    //   name: "Actions",
+    //   cell: (row) => (
+    //     <div className="flex items-center gap-3">
+    //       <button
+    //         title="Edit"
+    //         className="text-blue-600 hover:text-blue-800"
+    //         // onClick={() => onEdit(row)}
+    //       >
+    //         <MdOutlineModeEdit size={18} />
+    //       </button>
+    //       <button
+    //         title="View"
+    //         className="text-green-600 hover:text-green-800"
+    //         // onClick={() => navigate(`/books/${row._id}`)}
+    //       >
+    //         <MdOutlineRemoveRedEye size={18} />
+    //       </button>
+    //       <button
+    //         title="Delete"
+    //         className="text-red-600 hover:text-red-800"
+    //         // onClick={() => onDelete(row)}
+    //       >
+    //         <FaRegTrashCan size={16} />
+    //       </button>
+    //     </div>
+    //   ),
+    // },
   ];
 
   const handlePageChange = (selectedPage: number) => {
@@ -158,7 +158,7 @@ const ManageBooks = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm"
           />
-          <button className="p-2 rounded-sm border border-gray-300 hover:bg-gray-100 shadow-sm">
+          <button className="p-2 hidden rounded-sm border border-gray-300 hover:bg-gray-100 shadow-sm">
             <FiFilter size={18} className="text-gray-600" />
           </button>
         </div>
