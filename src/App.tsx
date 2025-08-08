@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import DashboardLayout from "./components/Layout/DashboardLayout";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import LoginPage from "./pages/Login/LoginPage";
@@ -14,7 +14,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<DashboardLayout />}>
-        <Route index element={<ManageLending />} />
+        <Route index element={<Navigate to="/manage-lendings" />} />
+        <Route path="/manage-lendings" element={<ManageLending />} />
         <Route path="/manage-books" element={<ManageBooks />} />
         <Route path="/user-profile/:userId" element={<UserDetails />} />
         <Route

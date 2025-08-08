@@ -21,6 +21,7 @@ const Sidebar: React.FC = () => {
   const handleLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     logOut();
+    localStorage.clear();
     navigate("/login");
   };
 
@@ -34,7 +35,7 @@ const Sidebar: React.FC = () => {
 
         <nav className="flex flex-col gap-3">
           {[
-            { to: "/", label: "Manage Lendings", icon: <IoLibrarySharp /> },
+            { to: "/manage-lendings", label: "Manage Lendings", icon: <IoLibrarySharp /> },
             {
               to: "/manage-readers",
               label: "Manage Readers",
@@ -43,11 +44,11 @@ const Sidebar: React.FC = () => {
             { to: "/manage-books", label: "Manage Books", icon: <FaBook /> },
             ...(user?.role === "admin"
               ? [
-                  {
-                    to: "/manage-users",
-                    label: "Manage Users",
-                    icon: <FaRegUser />,
-                  },
+                  // {
+                  //   to: "/manage-users",
+                  //   label: "Manage Users",
+                  //   icon: <FaRegUser />,
+                  // },
                 ]
               : []),
           ].map(({ to, label, icon }) => (
@@ -71,6 +72,7 @@ const Sidebar: React.FC = () => {
 
       <div className="pt-3 border-t border-gray-400 mt-10">
         <NavLink
+          to="#"
           onClick={handleLogout}
           className={({ isActive }) =>
             `flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200 ${
