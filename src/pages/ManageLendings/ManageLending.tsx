@@ -213,7 +213,7 @@ const ManageLending = () => {
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Search lendings..."
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm"
           />

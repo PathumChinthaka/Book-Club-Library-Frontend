@@ -21,7 +21,21 @@ export const userApiSlice = apiSlice.injectEndpoints({
         { type: "User", id: "LIST" },
       ],
     }),
+    uploadUserProfile: builder.mutation<
+      UserType,
+      Partial<UserType> & { id: string }
+    >({
+      query: ({ id, ...userData }) => ({
+        url: `/users/${id}/profile-picture:upload`,
+        method: "POST",
+        body: userData,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "User", id },
+        { type: "User", id: "LIST" },
+      ],
+    }),
   }),
 });
 
-export const { useGetUserByIdQuery, useUpdateUserByIdMutation } = userApiSlice;
+export const { useGetUserByIdQuery, useUpdateUserByIdMutation, useUploadUserProfileMutation } = userApiSlice;
