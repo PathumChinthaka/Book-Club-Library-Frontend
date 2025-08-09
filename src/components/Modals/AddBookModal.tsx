@@ -30,7 +30,7 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
     title: "",
     author: "",
     category: "",
-    isbn: "",
+    isbn: !isUpdateMode ? generateISBN() : "",
     publisher: "",
     publicationYear: "",
     copiesTotal: "1",
@@ -133,6 +133,26 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
     }
   };
 
+  function generateISBN(): string {
+    let isbn = "978";
+
+    for (let i = 0; i < 9; i++) {
+      isbn += Math.floor(Math.random() * 10);
+    }
+
+    let sum = 0;
+    for (let i = 0; i < 12; i++) {
+      const digit = parseInt(isbn[i], 10);
+      sum += i % 2 === 0 ? digit : digit * 3;
+    }
+    const remainder = sum % 10;
+    const checkDigit = remainder === 0 ? 0 : 10 - remainder;
+
+    isbn += checkDigit;
+
+    return isbn;
+  }
+
   return (
     <>
       <Modal dismissible show={isOpen} onClose={() => onClose()}>
@@ -140,7 +160,6 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
         <ModalBody>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Title */}
               <div>
                 <label
                   htmlFor="title"
@@ -163,7 +182,6 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
                 )}
               </div>
 
-              {/* Author */}
               <div>
                 <label
                   htmlFor="author"
@@ -186,7 +204,6 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
                 )}
               </div>
 
-              {/* Category */}
               <div>
                 <label
                   htmlFor="category"
@@ -215,8 +232,7 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
                 )}
               </div>
 
-              {/* ISBN */}
-              <div>
+              {/* <div>
                 <label
                   htmlFor="isbn"
                   className="block text-sm font-medium text-gray-700 mb-1"
@@ -227,6 +243,7 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
                   type="text"
                   id="isbn"
                   name="isbn"
+                  readOnly={isUpdateMode}
                   value={formData.isbn}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 border rounded-md ${
@@ -236,9 +253,8 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
                 {errors.isbn && (
                   <p className="mt-1 text-sm text-red-600">{errors.isbn}</p>
                 )}
-              </div>
+              </div> */}
 
-              {/* Publisher */}
               <div>
                 <label
                   htmlFor="publisher"
@@ -256,7 +272,6 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
                 />
               </div>
 
-              {/* Publication Year */}
               <div>
                 <label
                   htmlFor="publicationYear"
@@ -276,7 +291,6 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
                 />
               </div>
 
-              {/* Total Copies */}
               <div>
                 <label
                   htmlFor="copiesTotal"
@@ -302,7 +316,6 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
                 )}
               </div>
 
-              {/* Available Copies */}
               <div>
                 <label
                   htmlFor="copiesAvailable"
@@ -331,8 +344,7 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
               </div>
             </div>
 
-            {/* Book Image Upload */}
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <label
                 htmlFor="image"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -353,7 +365,7 @@ const AddBookForm: React.FC<AddBookFormProps> = ({
               file:bg-blue-50 file:text-blue-700
               hover:file:bg-blue-100"
               />
-            </div>
+            </div> */}
           </form>
         </ModalBody>
         <ModalFooter className="flex justify-between items-center p-3">

@@ -7,14 +7,10 @@ import { UserResponse } from "../../types/UserTypes";
 import { ActiveStatus } from "../../types/enum/ActiveStatus";
 import clsx from "clsx";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
-import { useUploadUserProfileMutation } from "../../features/user/manageUserSlice";
 
 const UserDetails = () => {
   const { userId } = useParams();
   const [user, setUser] = useState<UserResponse>();
-
-  const [uploadUserProfilePicture, { isLoading: uploadUserProfilePictureIsLoading }] =
-      useUploadUserProfileMutation();
 
   const {
     data: userDetails,

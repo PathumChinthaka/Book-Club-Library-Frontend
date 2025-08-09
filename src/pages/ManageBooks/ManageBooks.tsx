@@ -11,6 +11,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { ToastContainer, toast } from "react-toastify";
 import AddBookModal from "../../components/Modals/AddBookModal";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
+import { useCreateBookMutation } from "../../features/book/manageBooksSlice";
 
 const ManageBooks = () => {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -24,6 +25,9 @@ const ManageBooks = () => {
   const [showAddBookModal, setShowAddBookModal] = useState<boolean>(false);
 
   const debouncedBookSearch = useDebounce<string>(searchQuery);
+
+  const [createBook, { isLoading: createBookIsLoading }] =
+    useCreateBookMutation();
 
   const {
     data: allBooksData,
@@ -51,17 +55,15 @@ const ManageBooks = () => {
     {
       name: "Title",
       selector: (row) => row.title,
-      sortable: true,
+      width: "240px",
     },
     {
       name: "Author",
       selector: (row) => row.author,
-      sortable: true,
     },
     {
       name: "Category",
       selector: (row) => row.category,
-      sortable: true,
     },
     {
       name: "ISBN",
@@ -122,7 +124,25 @@ const ManageBooks = () => {
   };
 
   const handleAddBook = async (data: any) => {
-    console.log("Add Book data", data);
+    try {
+      await createBook(data).unwrap();
+      toast.success(`Book added successfully`, {
+        delay: 500,
+      });
+      setShowAddBookModal(false);
+    } catch (error: any) {
+      if (error?.data) {
+        toast.error(
+          error.data.Message ||
+            error.data.title ||
+            error.data.message ||
+            "Something went wrong",
+          { delay: 700 }
+        );
+      } else {
+        toast.error("Failed to add book", { delay: 700 });
+      }
+    }
   };
 
   return (
