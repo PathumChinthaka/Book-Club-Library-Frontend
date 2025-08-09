@@ -36,6 +36,8 @@ const AddProfilePictureModal: React.FC<AddProfilePictureModalProps> = ({
         delay: 500,
       });
       onClose();
+      setFile(null);
+      setPreview(null);
     } catch (error: any) {
       if (error?.data) {
         toast.error(
@@ -61,8 +63,8 @@ const AddProfilePictureModal: React.FC<AddProfilePictureModalProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {uploadUserProfilePictureIsLoading && <LoadingSpinner />}
       <Modal show={isOpen} size="md" onClose={onClose} popup>
+        {uploadUserProfilePictureIsLoading && <LoadingSpinner />}
         <ModalHeader />
         <ModalBody>
           <div className="space-y-4 text-center">
