@@ -2,31 +2,54 @@ import { useState } from "react";
 import { Modal, Button, ModalBody, ModalHeader } from "flowbite-react";
 import { FaCamera } from "react-icons/fa";
 import { useUploadUserProfileMutation } from "../../features/user/manageUserSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 type AddProfilePictureModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onHandleClick: (data: any) => void;
   isLoading?: boolean;
 };
 
 const AddProfilePictureModal: React.FC<AddProfilePictureModalProps> = ({
   isOpen,
   onClose,
-  onHandleClick,
   isLoading = false,
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
+  const [file, setFile] = useState<any>(null);
 
   const [
     uploadUserProfilePicture,
     { isLoading: uploadUserProfilePictureIsLoading },
   ] = useUploadUserProfileMutation();
 
+  const handleUploadProfile = async (data: any) => {
+    try {
+      await uploadUserProfilePicture(data).unwrap();
+      toast.success(`Profile Updated successfully`, {
+        delay: 500,
+      });
+      onClose();
+    } catch (error: any) {
+      if (error?.data) {
+        toast.error(
+          error.data.Message ||
+            error.data.title ||
+            error.data.message ||
+            "Something went wrong",
+          { delay: 700 }
+        );
+      } else {
+        toast.error("Failed to update profile", { delay: 700 });
+      }
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
+      setFile(file);
     }
   };
 
@@ -59,7 +82,7 @@ const AddProfilePictureModal: React.FC<AddProfilePictureModalProps> = ({
                          hover:file:bg-blue-100"
             />
 
-            <Button color="blue" onClick={onHandleClick}>
+            <Button color="blue" onClick={handleUploadProfile}>
               Save
             </Button>
           </div>

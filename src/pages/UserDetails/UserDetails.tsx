@@ -7,10 +7,13 @@ import { UserResponse } from "../../types/UserTypes";
 import { ActiveStatus } from "../../types/enum/ActiveStatus";
 import clsx from "clsx";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
+import AddProfilePictureModal from "../../components/Modals/ProfilePictureModal";
 
 const UserDetails = () => {
   const { userId } = useParams();
   const [user, setUser] = useState<UserResponse>();
+  const [profilePictureModal, setShowProfilePictureModal] =
+    useState<boolean>(false);
 
   const {
     data: userDetails,
@@ -64,14 +67,17 @@ const UserDetails = () => {
         </h2>
         <p className="text-sm text-gray-500 mt-1 capitalize">{user?.role}</p>
         <span
-          className={clsx("mt-2 px-3 py-1 rounded-full text-xs font-semibold text-center", {
-            "bg-green-100 text-green-700":
-              user?.activeStatus === ActiveStatus.Active,
-            "bg-yellow-100 text-yellow-700":
-              user?.activeStatus === ActiveStatus.Inactive,
-            "bg-red-100 text-red-700":
-              user?.activeStatus === ActiveStatus.Deleted,
-          })}
+          className={clsx(
+            "mt-2 px-3 py-1 rounded-full text-xs font-semibold text-center",
+            {
+              "bg-green-100 text-green-700":
+                user?.activeStatus === ActiveStatus.Active,
+              "bg-yellow-100 text-yellow-700":
+                user?.activeStatus === ActiveStatus.Inactive,
+              "bg-red-100 text-red-700":
+                user?.activeStatus === ActiveStatus.Deleted,
+            }
+          )}
         >
           {ActiveStatus[user?.activeStatus || 1]}
         </span>
@@ -91,6 +97,10 @@ const UserDetails = () => {
           />
         )}
       </div>
+      <AddProfilePictureModal
+        isOpen={profilePictureModal}
+        onClose={() => setShowProfilePictureModal(false)}
+      />
     </div>
   );
 };
