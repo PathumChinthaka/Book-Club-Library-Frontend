@@ -21,15 +21,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
         { type: "User", id: "LIST" },
       ],
     }),
-    uploadUserProfile: builder.mutation<
-      UserType,
-      Partial<UserType> & { id: string }
-    >({
-      query: ({ id, ...userData }) => ({
-        url: `/users/${id}/profile-picture:upload`,
-        method: "POST",
-        body: userData,
-      }),
+    uploadUserProfile: builder.mutation<UserType, { id: string; file: File }>({
+      query: ({ id, file }) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        return {
+          url: `/users/${id}/profile-picture:upload`,
+          method: "POST",
+          body: formData,
+        };
+      },
       invalidatesTags: (result, error, { id }) => [
         { type: "User", id },
         { type: "User", id: "LIST" },
@@ -38,4 +39,8 @@ export const userApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetUserByIdQuery, useUpdateUserByIdMutation, useUploadUserProfileMutation } = userApiSlice;
+export const {
+  useGetUserByIdQuery,
+  useUpdateUserByIdMutation,
+  useUploadUserProfileMutation,
+} = userApiSlice;

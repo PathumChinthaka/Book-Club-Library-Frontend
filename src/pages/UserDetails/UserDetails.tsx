@@ -59,7 +59,10 @@ const UserDetails = () => {
             className="w-full h-full rounded-full object-cover border-2 border-gray-300"
           />
           <div className="absolute inset-0 bg-gray-300 bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-            <FaCamera className="text-white text-xl" />
+            <FaCamera
+              onClick={() => setShowProfilePictureModal(true)}
+              className="text-white text-xl"
+            />
           </div>
         </div>
         <h2 className="mt-4 text-2xl font-semibold text-gray-800">
@@ -100,6 +103,7 @@ const UserDetails = () => {
       <AddProfilePictureModal
         isOpen={profilePictureModal}
         onClose={() => setShowProfilePictureModal(false)}
+        userId={userId || ""}
       />
     </div>
   );

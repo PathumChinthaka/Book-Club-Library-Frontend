@@ -3,16 +3,19 @@ import { Modal, Button, ModalBody, ModalHeader } from "flowbite-react";
 import { FaCamera } from "react-icons/fa";
 import { useUploadUserProfileMutation } from "../../features/user/manageUserSlice";
 import { ToastContainer, toast } from "react-toastify";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 type AddProfilePictureModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  userId: string;
   isLoading?: boolean;
 };
 
 const AddProfilePictureModal: React.FC<AddProfilePictureModalProps> = ({
   isOpen,
   onClose,
+  userId,
   isLoading = false,
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
@@ -23,9 +26,12 @@ const AddProfilePictureModal: React.FC<AddProfilePictureModalProps> = ({
     { isLoading: uploadUserProfilePictureIsLoading },
   ] = useUploadUserProfileMutation();
 
-  const handleUploadProfile = async (data: any) => {
+  const handleUploadProfile = async () => {
     try {
-      await uploadUserProfilePicture(data).unwrap();
+      await uploadUserProfilePicture({
+        id: userId,
+        file,
+      }).unwrap();
       toast.success(`Profile Updated successfully`, {
         delay: 500,
       });
@@ -55,6 +61,7 @@ const AddProfilePictureModal: React.FC<AddProfilePictureModalProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-4">
+      {uploadUserProfilePictureIsLoading && <LoadingSpinner />}
       <Modal show={isOpen} size="md" onClose={onClose} popup>
         <ModalHeader />
         <ModalBody>
